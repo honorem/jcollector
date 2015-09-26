@@ -25,12 +25,18 @@ package com.github.cambierr.jcollector.metric;
 
 import com.github.cambierr.jcollector.worker.Worker;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
  * @author cambierr
  */
 public class Metric {
+
+    public static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public final String name;
     public final ConcurrentLinkedQueue<Entry> entries;
@@ -57,5 +63,16 @@ public class Metric {
 
     private void register() {
         Worker.getInstance().metrics.add(this);
+    }
+
+    /**
+     * Schedules a recurrent metric
+     *
+     * @param _delta the time (ms) between two calls
+     * @param _provider the metric entry provider
+     * @return a ScheduledFuture to cancel the task if required
+     */
+    public ScheduledFuture schedule(int _delta, Provider _provider) {
+        return scheduler.schedule(() -> push(_provider.get()), _delta, TimeUnit.MILLISECONDS);
     }
 }
