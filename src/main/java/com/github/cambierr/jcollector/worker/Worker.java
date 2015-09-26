@@ -43,6 +43,11 @@ public class Worker {
     private final Timer daemon = new Timer(true);
     public final ConcurrentLinkedQueue<Metric> metrics = new ConcurrentLinkedQueue<>();
 
+    /**
+     * Returns an existing instance of the metric pusher or creates one
+     *
+     * @return an existing instance of the metric pusher or creates one
+     */
     public synchronized static Worker getInstance() {
         if (instance == null) {
             instance = new Worker();
@@ -50,6 +55,12 @@ public class Worker {
         return instance;
     }
 
+    /**
+     * Stops and destroy the running instance, if any
+     *
+     * <p>
+     * This won't unallocate Metric Object from memory if you linked them</p>
+     */
     public synchronized static void destroy() {
         if (instance != null) {
             instance.stop();
@@ -57,6 +68,12 @@ public class Worker {
         }
     }
 
+    /**
+     * Starts the metric pusher daemon
+     *
+     * @param _s The sender to be used
+     * @param _delta the time (in millis) between two push
+     */
     public synchronized void start(Sender _s, int _delta) {
         daemon.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -70,10 +87,21 @@ public class Worker {
         }, 0, _delta);
     }
 
+    /**
+     * Starts the metric pusher daemon
+     *
+     * @param _s The sender to be used
+     *
+     * <p>
+     * Default push-time is 5000 millis</p>
+     */
     public synchronized void start(Sender _s) {
         start(_s, 5000);
     }
 
+    /**
+     * Stops the metric pusher daemon
+     */
     public synchronized void stop() {
         daemon.cancel();
         daemon.purge();

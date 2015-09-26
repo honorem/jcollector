@@ -41,6 +41,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
+ * Metric pusher through http api. Made to works with OVH's time series PAAS but should work with any other standard OpenTSDB impementation
  *
  * @author cambierr
  */
@@ -49,11 +50,26 @@ public class OpenTsdbHttp implements Sender {
     private final URL host;
     private final String auth;
 
+    /**
+     * Instanciates this Sender
+     *
+     * @param _host the server host
+     *
+     * @throws MalformedURLException in case host is malformed
+     */
     public OpenTsdbHttp(String _host) throws MalformedURLException {
         host = new URL("https://" + _host + "/api/put");
         auth = null;
     }
 
+    /**
+     * Instanciates this Sender with basic authorization support
+     *
+     * @param _host the server host
+     * @param _authorization the basic authorization
+     *
+     * @throws MalformedURLException in case host is malformed
+     */
     public OpenTsdbHttp(String _host, String _authorization) throws MalformedURLException {
         host = new URL("https://" + _host + "/api/put");
         auth = _authorization;
@@ -63,11 +79,11 @@ public class OpenTsdbHttp implements Sender {
     public void send(ConcurrentLinkedQueue<Metric> _metrics) throws IOException {
 
         JSONArray entries = toJson(_metrics);
-        
-        if(entries.length() == 0){
+
+        if (entries.length() == 0) {
             return;
         }
-        
+
         HttpURLConnection conn = (HttpURLConnection) host.openConnection();
         if (auth != null) {
             conn.setRequestProperty("Authorization", "Basic " + Base64.getEncoder().encodeToString((auth).getBytes()));

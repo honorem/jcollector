@@ -32,5 +32,13 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author cambierr
  */
 public interface Sender {
+
+    /**
+     * Sends measured metrics via this Sender
+     *
+     * @param _metrics the metrics to be sent
+     *
+     * @throws IOException if something goes wrong during push
+     */
     public abstract void send(ConcurrentLinkedQueue<Metric> _metrics) throws IOException;
 }

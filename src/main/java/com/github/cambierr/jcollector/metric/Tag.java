@@ -31,7 +31,11 @@ public class Tag {
     
     public final String name;
     public final Object value;
-    
+    /**
+     * Creates a new tag
+     * @param _name the tag name
+     * @param _value  tge tag value
+     */
     public Tag(String _name, Object _value){
         name = _name;
         value = _value;

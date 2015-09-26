@@ -34,6 +34,7 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
 /**
+ * Metric pusher through telnet. Made to works with OVH's time series PAAS but should work with any other standard OpenTSDB impementation
  *
  * @author cambierr
  */
@@ -41,12 +42,29 @@ public class OpenTsdbTelnet implements Sender {
 
     private final DataOutputStream link;
 
+    /**
+     * Instanciates this Sender
+     *
+     * @param _host the server host
+     * @param _port the server port
+     *
+     * @throws java.io.IOException in case authentication goes wrong
+     */
     public OpenTsdbTelnet(String _host, int _port) throws IOException {
         SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
         SSLSocket sslsocket = (SSLSocket) factory.createSocket(_host, _port);
         link = new DataOutputStream(sslsocket.getOutputStream());
     }
 
+    /**
+     * Instanciates this Sender with basic authentication support
+     *
+     * @param _host the server host
+     * @param _port the server port
+     * @param _auth the authentication creds
+     *
+     * @throws java.io.IOException in case authentication goes wrong
+     */
     public OpenTsdbTelnet(String _host, int _port, String _auth) throws IOException {
         SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
         SSLSocket sslsocket = (SSLSocket) factory.createSocket(_host, _port);
@@ -54,7 +72,7 @@ public class OpenTsdbTelnet implements Sender {
         BufferedReader input = new BufferedReader(new InputStreamReader(sslsocket.getInputStream()));
         link.writeBytes("auth " + _auth + "\n");
         String response = input.readLine();
-        if(response == null || !response.equals("ok")){
+        if (response == null || !response.equals("ok")) {
             throw new IOException("authentication failed");
         }
     }
@@ -62,7 +80,7 @@ public class OpenTsdbTelnet implements Sender {
     @Override
     public void send(ConcurrentLinkedQueue<Metric> _metrics) throws IOException {
         String entries = toTelnet(_metrics);
-        if(entries.length() == 0){
+        if (entries.length() == 0) {
             return;
         }
         link.writeUTF(entries);

@@ -37,43 +37,87 @@ public class Entry {
     public final long time;
     public final Collection<Tag> tags;
 
+    /**
+     * Creates a metric entry with just its value and a custom time
+     *
+     * @param _time the metric time
+     * @param _value the metric value
+     */
     public Entry(long _time, double _value) {
         value = _value;
         tags = new ArrayList<>();
         time = _time;
     }
 
+    /**
+     * Creates a metric entry with value, time and a list of tags
+     *
+     * @param _time the metric time
+     * @param _value the metric value
+     * @param _tags a list of tags to be associated
+     */
     public Entry(long _time, double _value, Collection<Tag> _tags) {
         value = _value;
         tags = _tags;
         time = _time;
     }
 
+    /**
+     * Creates a metric entry with value, time and a list of tags
+     *
+     * @param _time the metric time
+     * @param _value the metric value
+     * @param _tags a list of tags to be associated
+     */
     public Entry(long _time, double _value, Tag[] _tags) {
         value = _value;
         tags = Arrays.asList(_tags);
         time = _time;
     }
 
+    /**
+     * Creates a metric entry with just its value
+     *
+     * @param _value the metric value
+     */
     public Entry(double _value) {
         value = _value;
         tags = new ArrayList<>();
         time = System.currentTimeMillis();
     }
 
+    /**
+     * Creates a metric entry with value and a list of tags
+     *
+     * @param _value the metric value
+     * @param _tags a list of tags to be associated
+     */
     public Entry(double _value, Collection<Tag> _tags) {
         value = _value;
         tags = _tags;
         time = System.currentTimeMillis();
     }
 
+    /**
+     * Creates a metric entry with value and a list of tags
+     *
+     * @param _value the metric value
+     * @param _tags a list of tags to be associated
+     */
     public Entry(double _value, Tag[] _tags) {
         value = _value;
         tags = Arrays.asList(_tags);
         time = System.currentTimeMillis();
     }
-    
-    public Entry addTag(Tag _tag){
+
+    /**
+     * Adds a tag to thie metric entry
+     *
+     * @param _tag the tag to be added
+     *
+     * @return a reference to this entry
+     */
+    public Entry addTag(Tag _tag) {
         tags.add(_tag);
         return this;
     }

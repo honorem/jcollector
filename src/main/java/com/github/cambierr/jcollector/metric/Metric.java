@@ -35,17 +35,27 @@ public class Metric {
     public final String name;
     public final ConcurrentLinkedQueue<Entry> entries;
 
+    /**
+     * Creates a metric from its name
+     *
+     * @param _name the metric name
+     */
     public Metric(String _name) {
         name = _name;
         entries = new ConcurrentLinkedQueue<>();
         register();
     }
 
+    /**
+     * Pushs a new entry for this metric
+     *
+     * @param _entry the new entry
+     */
     public void push(Entry _entry) {
         entries.add(_entry);
     }
-    
-    private void register(){
+
+    private void register() {
         Worker.getInstance().metrics.add(this);
     }
 }
