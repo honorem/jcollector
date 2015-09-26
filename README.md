@@ -26,4 +26,11 @@ public class Test {
 }
 ```
 
-##Maven:
+##Maven
+```xml
+<dependency>
+  <groupId>com.github.cambierr</groupId>
+  <artifactId>jcollector</artifactId>
+  <version>...</version>
+</dependency>
+```
