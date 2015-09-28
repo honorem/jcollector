@@ -32,7 +32,7 @@ public interface Provider {
     /**
      * Creates a Metric Entry to be pushed
      *
-     * @return
+     * @return the new entry
      */
     public Entry get();
 }
