@@ -48,7 +48,7 @@ import org.json.JSONObject;
 public class OpenTsdbHttp implements Sender {
 
     private final URL host;
-    private final String auth;
+    private final Authorization auth;
 
     /**
      * Instanciates this Sender
@@ -58,7 +58,7 @@ public class OpenTsdbHttp implements Sender {
      * @throws MalformedURLException in case host is malformed
      */
     public OpenTsdbHttp(String _host) throws MalformedURLException {
-        host = new URL("https://" + _host + "/api/put");
+        host = new URL(_host + "/api/put");
         auth = null;
     }
 
@@ -66,12 +66,12 @@ public class OpenTsdbHttp implements Sender {
      * Instanciates this Sender with basic authorization support
      *
      * @param _host the server host
-     * @param _authorization the basic authorization
+     * @param _authorization the authorization object
      *
      * @throws MalformedURLException in case host is malformed
      */
-    public OpenTsdbHttp(String _host, String _authorization) throws MalformedURLException {
-        host = new URL("https://" + _host + "/api/put");
+    public OpenTsdbHttp(String _host, Authorization _authorization) throws MalformedURLException {
+        host = new URL(_host + "/api/put");
         auth = _authorization;
     }
 
@@ -86,7 +86,7 @@ public class OpenTsdbHttp implements Sender {
 
         HttpURLConnection conn = (HttpURLConnection) host.openConnection();
         if (auth != null) {
-            conn.setRequestProperty("Authorization", "Basic " + Base64.getEncoder().encodeToString((auth).getBytes()));
+            conn.setRequestProperty("Authorization", auth.getAuth());
         }
 
         conn.setDoOutput(true);
@@ -135,4 +135,40 @@ public class OpenTsdbHttp implements Sender {
         });
     }
 
+    public static class Authorization {
+
+        private final String auth;
+
+        protected Authorization(String _auth) {
+            auth = _auth;
+        }
+
+        /**
+         * Creates a Basic authorization object isong username and password
+         *
+         * @param _user the username
+         * @param _password the password
+         *
+         * @return an authorization object to be used in OpenTsdbHttp sender
+         */
+        public static Authorization basic(String _user, String _password) {
+            return new Authorization("Basic " + Base64.getEncoder().encodeToString((_user + ":" + _password).getBytes()));
+        }
+
+        /**
+         * Creates a Bearer authorization object isong username and password
+         *
+         * @param _token the bearer token
+         *
+         * @return an authorization object to be used in OpenTsdbHttp sender
+         */
+        public static Authorization bearer(String _token) {
+            return new Authorization("Bearer " + _token);
+        }
+
+        private String getAuth() {
+            return auth;
+        }
+
+    }
 }
