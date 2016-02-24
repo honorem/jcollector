@@ -2,4 +2,7 @@ language: java
 jdk:
   - oraclejdk8
 script:
-      - mvn clean verify test
+  - mvn clean verify test
+cache: 
+  - apt
+  - $HOME/.m2
