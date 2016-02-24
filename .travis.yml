@@ -2,7 +2,7 @@ language: java
 jdk:
   - oraclejdk8
 script:
-  - mvn clean verify test
+  - mvn clean verify test -Dgpg.skip=true
 cache: 
   - apt
   - $HOME/.m2
