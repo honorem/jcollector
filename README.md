@@ -1,4 +1,6 @@
 # jcollector
+![Build Status](https://travis-ci.org/cambierr/jcollector.svg?branch=master)
+
 jcollector is a scollector-like tool to be used within your java apps.
 
 It's not a super-pro tool, I just made it to be easily expandable since I use it in a lot of different projects to push metrics to some OpenTSDB servers like the OVH's timeseries PAAS.
