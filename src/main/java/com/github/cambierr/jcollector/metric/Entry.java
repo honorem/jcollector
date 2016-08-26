@@ -44,9 +44,7 @@ public class Entry {
      * @param _value the metric value
      */
     public Entry(long _time, double _value) {
-        value = _value;
-        tags = new ArrayList<>();
-        time = _time;
+        this(_time, _value, new ArrayList<>());
     }
 
     /**
@@ -70,9 +68,7 @@ public class Entry {
      * @param _tags a list of tags to be associated
      */
     public Entry(long _time, double _value, Tag[] _tags) {
-        value = _value;
-        tags = Arrays.asList(_tags);
-        time = _time;
+        this(_time, _value, Arrays.asList(_tags));
     }
 
     /**
@@ -81,9 +77,7 @@ public class Entry {
      * @param _value the metric value
      */
     public Entry(double _value) {
-        value = _value;
-        tags = new ArrayList<>();
-        time = System.currentTimeMillis();
+        this(System.currentTimeMillis(), _value);
     }
 
     /**
@@ -93,9 +87,7 @@ public class Entry {
      * @param _tags a list of tags to be associated
      */
     public Entry(double _value, Collection<Tag> _tags) {
-        value = _value;
-        tags = _tags;
-        time = System.currentTimeMillis();
+        this(System.currentTimeMillis(), _value, _tags);
     }
 
     /**
@@ -105,9 +97,7 @@ public class Entry {
      * @param _tags a list of tags to be associated
      */
     public Entry(double _value, Tag[] _tags) {
-        value = _value;
-        tags = Arrays.asList(_tags);
-        time = System.currentTimeMillis();
+        this(System.currentTimeMillis(), _value, _tags);
     }
 
     /**
@@ -120,6 +110,11 @@ public class Entry {
     public Entry addTag(Tag _tag) {
         tags.add(_tag);
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "{time: " + time + ", value: " + value + ", tags: " + tags + "}";
     }
 
 }

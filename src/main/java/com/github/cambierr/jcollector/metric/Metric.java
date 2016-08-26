@@ -73,6 +73,16 @@ public class Metric {
      * @return a ScheduledFuture to cancel the task if required
      */
     public ScheduledFuture schedule(int _delta, Provider _provider) {
-        return scheduler.scheduleAtFixedRate(() -> push(_provider.get()), 0, _delta, TimeUnit.MILLISECONDS);
+        return scheduler.scheduleAtFixedRate(() -> {
+            Entry e = _provider.get();
+            if (e != null) {
+                push(e);
+            }
+        }, 0, _delta, TimeUnit.MILLISECONDS);
+    }
+
+    @Override
+    public String toString() {
+        return "{name: " + name + ", values: " + entries + "}";
     }
 }

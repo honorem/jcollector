@@ -31,6 +31,7 @@ public interface Provider {
 
     /**
      * Creates a Metric Entry to be pushed
+     * If the returned value is null, it's ignored
      *
      * @return the new entry
      */

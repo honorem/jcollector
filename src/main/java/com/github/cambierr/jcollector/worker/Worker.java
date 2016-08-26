@@ -38,10 +38,11 @@ import java.util.logging.Logger;
 public class Worker {
 
     private static Worker instance;
-    public static final Logger logger = Logger.getLogger("jcollector");
+    public static final Logger logger = Logger.getLogger(Worker.class.getName());
 
     private final Timer daemon = new Timer(true);
     public final ConcurrentLinkedQueue<Metric> metrics = new ConcurrentLinkedQueue<>();
+    private boolean debug = false;
 
     /**
      * Returns an existing instance of the metric pusher or creates one
@@ -69,6 +70,18 @@ public class Worker {
     }
 
     /**
+     * Set the debug flag of the worker. Used to require printing of all sent
+     * data
+     *
+     * @param _debug true = activate debug mode, false = disable it
+     * @return the updated Worker instance
+     */
+    public Worker setDebug(boolean _debug) {
+        debug = _debug;
+        return this;
+    }
+
+    /**
      * Starts the metric pusher daemon
      *
      * @param _s The sender to be used
@@ -79,6 +92,9 @@ public class Worker {
             @Override
             public void run() {
                 try {
+                    if (debug) {
+                        logger.log(Level.INFO, "Sending metrics: " + metrics.toString());
+                    }
                     _s.send(metrics);
                 } catch (Exception ex) {
                     logger.log(Level.WARNING, "Could not push data through " + _s.getClass().getSimpleName(), ex);
