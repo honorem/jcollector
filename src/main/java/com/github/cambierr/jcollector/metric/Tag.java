@@ -30,7 +30,7 @@ package com.github.cambierr.jcollector.metric;
 public class Tag {
 
     public final String name;
-    public final Object value;
+    public final String value;
 
     /**
      * Creates a new tag
@@ -40,7 +40,7 @@ public class Tag {
      */
     public Tag(String _name, Object _value) {
         name = _name;
-        value = _value;
+        value = _value.toString();
     }
 
     @Override
